@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: cubee-api 
+server:
+  port: ${PORT:5000}
+logging:
+  level:
+    root: ERROR
+app: 
+  environment: test
+  parameter-names:
+    api-keys-path: "/${spring.application.name}/${app.environment}/api-keys/"
+    openAiApiKeyPath: "/openai/${spring.application.name}/${app.environment}/api-key"
+openai:
+  chat: GPT_4_O_MINI
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+app:
+  environment: prod
