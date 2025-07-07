@@ -27,22 +27,24 @@ public class ApiKeyFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+	        throws ServletException, IOException {
 
-		String requestApiKey = request.getHeader("X-API-KEY");
 	    String path = request.getRequestURI();
-		
-	    if (SKIP_PATHS.contains(path)) {
+
+	    // don't reject preflight requests or /health
+	    if (SKIP_PATHS.contains(path) || "OPTIONS".equalsIgnoreCase(request.getMethod())) {
 	        filterChain.doFilter(request, response);
 	        return;
 	    }
 
-		if (validApiKeys.contains(requestApiKey)) {
-			filterChain.doFilter(request, response);
-		} else {
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.getWriter().write("Unauthorized - Invalid API Key");
-		}
+	    String requestApiKey = request.getHeader("X-API-KEY");
+	    if (validApiKeys.contains(requestApiKey)) {
+	        filterChain.doFilter(request, response);
+	    } else {
+	        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	        response.getWriter().write("Unauthorized - Invalid API Key");
+	    }
 	}
+
 
 }

@@ -13,12 +13,17 @@ app:
     openAiApiKeyPath: "/openai/${spring.application.name}/${app.environment}/api-key"
 openai:
   chat: GPT_4_O_MINI
+cors:
+  allowed-origins:
+    - http://localhost:3000
 ---
-
 spring:
   config:
     activate:
       on-profile: test
+cors:
+  allowed-origins:
+    - https://test.cubee.schf.me
 ---
 spring:
   config:
@@ -26,3 +31,6 @@ spring:
       on-profile: prod
 app:
   environment: prod
+cors:
+  allowed-origins:
+    - https://cubee.schf.me
